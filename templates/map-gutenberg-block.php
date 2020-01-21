@@ -24,7 +24,7 @@
 <div id="MAPPA" style="width: 1200px; height:400px"></div>
 <div id="popup" class="popup"></div>
 <script type="text/javascript">
-
+    history.replaceState(null, "", window.location.pathname);
     setTimeout(()=>{
         var Turin = ol.proj.fromLonLat([7.667129335409262, 45.07799857283038]);
         var view = new ol.View({
@@ -87,22 +87,33 @@
         });
         map.addOverlay(popupOverlay);
 
-        var select = new ol.interaction.Select({
+        var selectHover = new ol.interaction.Select({
+            style: iconStyle,
+            condition: ol.events.condition.pointerMove
+        });
+        var selectClick = new ol.interaction.Select({
             style: iconStyle
         });
-        map.addInteraction(select);
-        select.on('select', function(e) {
+        map.addInteraction(selectHover);
+        map.addInteraction(selectClick);
+        selectHover.on('select', function(e) {
             let selectedFeature = e.selected[0];
             let element = popupOverlay.values_.element;
             if (!selectedFeature){
                 element.hidden = true;
+                document.body.style.cursor = ''
                 return;
             }
+            document.body.style.cursor = 'pointer'
             element.hidden = false;
             let coordinatePopup = selectedFeature.values_.geometry.flatCoordinates
-            element.innerHTML = '<a href="#">'+selectedFeature.values_.locationName+'</a>'
+            element.innerHTML = '<div>'+selectedFeature.values_.locationName+'</div>'
             popupOverlay.setPosition(coordinatePopup);
         });
+        selectClick.on('select', function(e){
+            let locationName = e.selected[0].values_.locationName
+            window.location = location.protocol + '//' + location.host + location.pathname + '?sort=locationName&locName=' + locationName
+        })
 
         var geocoder = new Geocoder('nominatim', {
             provider: 'osm',
