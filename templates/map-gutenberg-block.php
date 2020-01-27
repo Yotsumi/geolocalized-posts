@@ -24,6 +24,34 @@
 <div id="MAPPA" style="width: 1200px; height:400px"></div>
 <div id="popup" class="popup"></div>
 <script type="text/javascript">
+    let url = window.location.href;
+    function getParameterByName(name) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+    function nearMe(){
+        var geolocation = new ol.Geolocation({
+            trackingOptions: {
+                enableHighAccuracy: true
+            }
+        });
+        geolocation.on('change:position', function() {
+            var coordinates = geolocation.getPosition();
+            if (geolocation.getAccuracy() > 250)
+                alert('Attenzione, la geolocalizzazione è molto inaccurata: ' + geolocation.getAccuracy() + 'm di errore');
+            window.location = location.protocol + '//' + location.host + location.pathname + '?sort=near&lon=' + coordinates[0] + '&lat=' + coordinates[1];
+        });
+        geolocation.on('error', function(error) {
+            console.log('geotracking error: ' + error.message)
+            geolocation.setTracking(false);
+        });
+        geolocation.setTracking(true);
+    }
     history.replaceState(null, "", window.location.pathname);
     setTimeout(()=>{
         var Turin = ol.proj.fromLonLat([7.667129335409262, 45.07799857283038]);
@@ -41,7 +69,34 @@
                 src: 'http://maps.google.com/mapfiles/ms/micons/blue.png',
                 crossOrigin: 'anonymous',
             })
+        });
+
+        var theNewCenter = [getParameterByName('lon'), getParameterByName('lat')]
+        if(theNewCenter[0]){
+            view = new ol.View({
+                center: ol.proj.fromLonLat(theNewCenter),
+                zoom: 15
             });
+            let feature = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat(theNewCenter)),
+                locationName: 'Tu sei qui'
+            })
+            let newStyle = new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 6,
+                    fill: new ol.style.Fill({
+                    color: '#3399CC'
+                    }),
+                    stroke: new ol.style.Stroke({
+                    color: '#fff',
+                    width: 2
+                    })
+                })
+            });
+            feature.setStyle(newStyle)
+            vectorSource.addFeature(feature)
+        }
+
         var places = [];
         <?php foreach($locationList as $location): ?>
             geoLoc = {
@@ -52,7 +107,15 @@
         <?php endforeach; ?>
 
         var features = [];
+        let locName = getParameterByName('locName')
         for (var i = 0; i < places.length; i++) {
+            if (locName)
+                if (locName == places[i].name){
+                    view = new ol.View({
+                        center: ol.proj.fromLonLat(places[i].coordinates),
+                        zoom: 15
+                    });
+                }
             var iconFeature = new ol.Feature({
                 geometry: new ol.geom.Point(ol.proj.transform([places[i].coordinates[0], places[i].coordinates[1]], 'EPSG:4326', 'EPSG:3857')),
                 locationName: places[i].name
@@ -104,7 +167,8 @@
                 document.body.style.cursor = ''
                 return;
             }
-            document.body.style.cursor = 'pointer'
+            if (selectedFeature.values_.locationName != 'Tu sei qui')
+                document.body.style.cursor = 'pointer'
             element.hidden = false;
             let coordinatePopup = selectedFeature.values_.geometry.flatCoordinates
             element.innerHTML = '<div>'+selectedFeature.values_.locationName+'</div>'
@@ -112,6 +176,7 @@
         });
         selectClick.on('select', function(e){
             let locationName = e.selected[0].values_.locationName
+            if (locationName == 'Tu sei qui') return;
             window.location = location.protocol + '//' + location.host + location.pathname + '?sort=locationName&locName=' + locationName
         })
 

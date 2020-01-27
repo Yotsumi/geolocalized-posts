@@ -23,6 +23,8 @@ function filter_by_location( $clauses, $query_object ){
         $lat = doubleval($_GET['lat']);
         $lon = doubleval($_GET['lon']);
         $orderby = "ACOS(SIN(lat*$sf)*SIN($lat*$sf) + COS(lat*$sf)*COS($lat*$sf)*COS((lon-$lon)*$sf))";
+        $clauses['groupby'] .= "{$wpdb->prefix}posts.ID";
+
     }
 
   return $clauses;
@@ -38,6 +40,7 @@ function filter_by_location_name( $clauses, $query_object ){
         $join .= " JOIN {$wpdb->prefix}postmeta pm ON pm.post_id = {$wpdb->prefix}posts.ID JOIN {$wpdb->prefix}point_of_interest po on po.name = pm.meta_value";
         $locName = $_GET['locName'];
         $clauses['where'] .= " AND po.name = '$locName'";
+        $clauses['groupby'] .= "{$wpdb->prefix}posts.ID";
 
     }
 
