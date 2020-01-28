@@ -3,7 +3,7 @@
  * Plugin Name: Geolocalized Posts
  * Plugin URI: http://www.mywebsite.com/geolocalized-posts
  * Description: A plugin for manage and associate geotag to posts
- * Version: 1.0
+ * Version: 2.0
  * Author: Yotsumi
  */
 
@@ -25,3 +25,5 @@ add_action( 'init', 'gut_insert_location_block' );
 add_action( 'init', 'gut_insert_map_block' );
 
 add_action( 'wp_ajax_my_action', 'my_action_callback' );
+
+add_shortcode( 'mapForGeotags', 'gut_render_map' );
