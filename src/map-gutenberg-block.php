@@ -25,7 +25,7 @@ function gut_insert_map_block() {
     ));
 }
 
-function gut_render_map($params) {
+function gut_render_map($params = null) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'point_of_interest';
     $locationList = $wpdb->get_results($wpdb->prepare("SELECT * from $table_name"));

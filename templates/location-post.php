@@ -55,7 +55,7 @@
                 var vectorSource = new ol.source.Vector({});
                 var iconStyle = new ol.style.Style({
                     image: new ol.style.Icon({
-                    anchor: [0.5, 0.5],
+                    anchor: [0.5, 1],
                     anchorXUnits: 'fraction',
                     anchorYUnits: 'fraction',
                     src: 'http://maps.google.com/mapfiles/ms/micons/blue.png',
@@ -105,7 +105,7 @@
             setTimeout(()=>{
                 var iconStyle = new ol.style.Style({
                     image: new ol.style.Icon({
-                    anchor: [0.5, 0.5],
+                    anchor: [0.5, 1],
                     anchorXUnits: 'fraction',
                     anchorYUnits: 'fraction',
                     src: 'http://maps.google.com/mapfiles/ms/micons/blue.png',

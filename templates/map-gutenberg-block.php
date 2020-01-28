@@ -34,7 +34,8 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
-    function nearMe(){
+
+    function sortPosts(dw, tw){
         var geolocation = new ol.Geolocation({
             trackingOptions: {
                 enableHighAccuracy: true
@@ -42,9 +43,11 @@
         });
         geolocation.on('change:position', function() {
             var coordinates = geolocation.getPosition();
-            if (geolocation.getAccuracy() > 250)
-                alert('Attenzione, la geolocalizzazione è molto inaccurata: ' + geolocation.getAccuracy() + 'm di errore');
-            window.location = location.protocol + '//' + location.host + location.pathname + '?sort=near&lon=' + coordinates[0] + '&lat=' + coordinates[1];
+            window.location = location.protocol + '//' + location.host + location.pathname 
+            + '?action=sort&lon=' + coordinates[0] 
+            + '&lat=' + coordinates[1]
+            + '&distanceWeight=' + dw
+            + '&timeWeight=' + tw;
         });
         geolocation.on('error', function(error) {
             console.log('geotracking error: ' + error.message)
@@ -52,6 +55,7 @@
         });
         geolocation.setTracking(true);
     }
+
     history.replaceState(null, "", window.location.pathname);
     setTimeout(()=>{
         var Turin = ol.proj.fromLonLat([7.667129335409262, 45.07799857283038]);
@@ -63,7 +67,7 @@
         var vectorSource = new ol.source.Vector({});
         var iconStyle = new ol.style.Style({
             image: new ol.style.Icon({
-                anchor: [0.5, 0.5],
+                anchor: [0.5, 1],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
                 src: 'http://maps.google.com/mapfiles/ms/micons/blue.png',
