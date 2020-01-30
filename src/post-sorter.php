@@ -1,4 +1,5 @@
 <?php
+define( 'DS', DIRECTORY_SEPARATOR );
 
 include(plugin_dir_path( __FILE__ ) . 'Sorting' . DS . 'Sorting.php');
 include(plugin_dir_path( __FILE__ ) . 'Sorting' . DS . 'PilloleForSorting.php');
