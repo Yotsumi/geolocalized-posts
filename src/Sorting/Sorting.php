@@ -13,7 +13,7 @@ include(plugin_dir_path( __FILE__ ) . 'PilloleWeight.php');
         public function SortingByWeight(array $pilloleList, float $userLat, float $userLng, float $distanceWeight = 5, float $timeWeight = 5) 
         {
             if($pilloleList == [])
-                return;
+                return [];
 
             $converter = new TimeDistanceConverter();
             $pillole = [];

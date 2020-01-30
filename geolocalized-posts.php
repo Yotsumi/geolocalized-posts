@@ -26,6 +26,8 @@ register_activation_hook( __FILE__, 'jal_install' );
 add_action( 'init', 'gut_insert_location_block' );
 add_action( 'init', 'gut_insert_map_block' );
 add_action( 'wp_ajax_my_action', 'my_action_callback' );
+
+// Short code for the map
 add_shortcode( 'mapForGeotags', 'gut_render_map' );
 
 // Uninstall

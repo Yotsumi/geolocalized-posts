@@ -34,6 +34,9 @@ function filter_by_location( $clauses, $query_object ){
         $pilloleSorted = $ps->SortingByWeight($pillole, floatval($_GET['lat']), floatval($_GET['lon']), floatval($_GET['distanceWeight']), floatval($_GET['timeWeight']));
 
         // clauses WHERE
+        if($pilloleSorted == [])
+            return;
+
         $ids = "";
         foreach ($pilloleSorted as $id) {
             $ids .= $id . ", ";

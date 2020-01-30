@@ -42,7 +42,14 @@
             }
         });
         geolocation.on('change:position', function() {
+
             var coordinates = geolocation.getPosition();
+
+            if (geolocation.getAccuracy() > 250 && sessionStorage.getItem("userLocalizated") == undefined){
+                alert('Attenzione, la geolocalizzazione è molto inaccurata: ' + geolocation.getAccuracy() + 'm di errore');
+                sessionStorage.setItem("userLocalizated", "verify");
+            }
+            
             window.location = location.protocol + '//' + location.host + location.pathname 
             + '?action=sort&lon=' + coordinates[0] 
             + '&lat=' + coordinates[1]
