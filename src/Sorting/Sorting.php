@@ -51,7 +51,7 @@ include(plugin_dir_path( __FILE__ ) . 'PilloleWeight.php');
                 $weight = ($pillole[$i]->distance * $distanceWeight) + ($pillole[$i]->timeDistanceInMinutes * $timeWeight);
                 array_push($pilloleWeight, new PillolaWeight(
                     $pillole[$i]->id,
-                    $weight,
+                    $weight
                 ));
             }
 
