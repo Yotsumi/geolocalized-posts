@@ -1,7 +1,7 @@
 <?php
 
-include(plugin_dir_path( __FILE__ ) . 'Sorting\Sorting.php');
-include(plugin_dir_path( __FILE__ ) . 'Sorting\PilloleForSorting.php');
+include(plugin_dir_path( __FILE__ ) . 'Sorting' . DS . 'Sorting.php');
+include(plugin_dir_path( __FILE__ ) . 'Sorting' . DS . 'PilloleForSorting.php');
 
 function sorter(){
     if ($_GET['action'] == 'sort' && isset($_GET['lon']) && isset($_GET['lat']) && isset($_GET['distanceWeight']) && isset($_GET['timeWeight'])){
@@ -34,6 +34,9 @@ function filter_by_location( $clauses, $query_object ){
         $pilloleSorted = $ps->SortingByWeight($pillole, floatval($_GET['lat']), floatval($_GET['lon']), floatval($_GET['distanceWeight']), floatval($_GET['timeWeight']));
 
         // clauses WHERE
+        if($pilloleSorted == [])
+            return;
+
         $ids = "";
         foreach ($pilloleSorted as $id) {
             $ids .= $id . ", ";

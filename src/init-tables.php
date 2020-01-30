@@ -18,3 +18,13 @@ function jal_install() {
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
 }
+
+function jal_uninstall() {
+	global $wpdb;
+
+	$query = "DELETE FROM $wpdb->prefix" . "postmeta WHERE meta_key = '_location_name'";
+	$wpdb->query($query);
+	
+	$query = "DROP TABLE $wpdb->prefix" . "point_of_interest";
+	$wpdb->query($query);
+}

@@ -46,11 +46,9 @@
   }
 
   function deletePoi(){
-    LonLan = JSON.parse(jQuery('#sel1').val());
     var data = {
         'action': 'delete_poi',
-        'lat': LonLan[1],
-        'lon': LonLan[0]
+        'tag': jQuery('#sel1 option:selected').html()
       };
     jQuery.post(ajaxurl, data, function(response) {}).done(()=>{ location.reload() }).fail(()=>{alert('Database error')});
   }
