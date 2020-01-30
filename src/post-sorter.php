@@ -1,7 +1,7 @@
 <?php
 
-include(plugin_dir_path( __FILE__ ) . 'Sorting\Sorting.php');
-include(plugin_dir_path( __FILE__ ) . 'Sorting\PilloleForSorting.php');
+include(plugin_dir_path( __FILE__ ) . 'Sorting' . DS . 'Sorting.php');
+include(plugin_dir_path( __FILE__ ) . 'Sorting' . DS . 'PilloleForSorting.php');
 
 function sorter(){
     if ($_GET['action'] == 'sort' && isset($_GET['lon']) && isset($_GET['lat']) && isset($_GET['distanceWeight']) && isset($_GET['timeWeight'])){

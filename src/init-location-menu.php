@@ -53,9 +53,11 @@ function set_poi() {
 }
 
 function delete_poi() {
-	global $wpdb;
-    $table_name = $wpdb->prefix . 'point_of_interest';
-	$data = array('lon' => $_POST['lon'], 'lat' => $_POST['lat']);
-    $wpdb->delete($table_name, $data);
+    global $wpdb;
+    $tag = $_POST['tag'];
+    $query = "DELETE FROM $wpdb->prefix" . "point_of_interest WHERE name = '$tag'";
+    $wpdb->query($query);
+    $query = "DELETE FROM $wpdb->prefix" . "postmeta WHERE meta_value = '$tag'";
+    $wpdb->query($query);
 	wp_die(); // this is required to terminate immediately and return a proper response
 }
